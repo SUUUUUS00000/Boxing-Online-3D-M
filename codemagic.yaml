@@ -15,12 +15,14 @@ workflows:
       - name: Set up local.properties
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      - name: Upgrade Gradle to 9.3.1
+      - name: Configure Gradle Wrapper
         script: |
-          wget https://gradle.org -P /tmp
-          sudo unzip -d /opt/gradle /tmp/gradle-9.3.1-bin.zip
-          export PATH=/opt/gradle/gradle-9.3.1/bin:$PATH
-          echo "export PATH=/opt/gradle/gradle-9.3.1/bin:\$PATH" >> $CM_ENV
+          mkdir -p gradle/wrapper
+          echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
+          echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip" >> gradle/wrapper/gradle-wrapper.properties
+          echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
+          echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
       - name: Build Android APK
         script: |
           gradle assembleDebug
