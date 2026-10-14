@@ -7,7 +7,6 @@ workflows:
       groups:
         - android_properties
       vars:
-        # Указываем версию Java, необходимую для сборки
         JAVA_VERSION: "17"
     triggering:
       events:
@@ -16,11 +15,8 @@ workflows:
       - name: Set up local.properties
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      - name: Make gradlew executable
-        script: |
-          chmod +x gradlew
       - name: Build Android APK
         script: |
-          ./gradlew assembleDebug
+          gradle assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
