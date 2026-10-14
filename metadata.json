@@ -1,0 +1,6 @@
+{
+  "name": "Boxing Online 3D",
+  "description": "Physics-based 3D boxing simulation game inspired by OB3D with realistic combat, ranked ladder, character customization, daily rewards, and global chat.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
