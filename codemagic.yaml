@@ -15,16 +15,16 @@ workflows:
       - name: Set up local.properties
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Generate Debug Keystore
+        script: |
+          # Автоматически создаем стандартный тестовый ключ, который требует проект
+          keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
       - name: Setup and run Gradle Wrapper
         script: |
-          # Используем глобальный старый gradle, чтобы он сам сгенерировал правильный wrapper 9.3.1 в проекте
           gradle wrapper --gradle-version 9.3.1
-          
-          # Делаем только что созданный файл запуска исполняемым
           chmod +x gradlew
       - name: Build Android APK
         script: |
-          # Запускаем сборку строго через локальный wrapper, который теперь точно версии 9.3.1
           ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
