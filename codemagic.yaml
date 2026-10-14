@@ -1,0 +1,26 @@
+workflows:
+  android-workflow:
+    name: Android Gradle Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - android_properties
+      vars:
+        # Указываем версию Java, необходимую для сборки
+        JAVA_VERSION: "17"
+    triggering:
+      events:
+        - push
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+      - name: Make gradlew executable
+        script: |
+          chmod +x gradlew
+      - name: Build Android APK
+        script: |
+          ./gradlew assembleDebug
+    artifacts:
+      - app/build/outputs/apk/debug/*.apk
