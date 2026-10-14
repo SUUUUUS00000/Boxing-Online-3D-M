@@ -15,16 +15,16 @@ workflows:
       - name: Set up local.properties
         script: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-      - name: Configure Gradle Wrapper
+      - name: Setup and run Gradle Wrapper
         script: |
-          mkdir -p gradle/wrapper
-          echo "distributionBase=GRADLE_USER_HOME" > gradle/wrapper/gradle-wrapper.properties
-          echo "distributionPath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
-          echo "distributionUrl=https\://services.gradle.org/distributions/gradle-9.3.1-bin.zip" >> gradle/wrapper/gradle-wrapper.properties
-          echo "zipStoreBase=GRADLE_USER_HOME" >> gradle/wrapper/gradle-wrapper.properties
-          echo "zipStorePath=wrapper/dists" >> gradle/wrapper/gradle-wrapper.properties
+          # Используем глобальный старый gradle, чтобы он сам сгенерировал правильный wrapper 9.3.1 в проекте
+          gradle wrapper --gradle-version 9.3.1
+          
+          # Делаем только что созданный файл запуска исполняемым
+          chmod +x gradlew
       - name: Build Android APK
         script: |
-          gradle assembleDebug
+          # Запускаем сборку строго через локальный wrapper, который теперь точно версии 9.3.1
+          ./gradlew assembleDebug
     artifacts:
       - app/build/outputs/apk/debug/*.apk
